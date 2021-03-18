@@ -66,7 +66,7 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
     // put your code here (you can delete this sample code)
 
 
-    //landing page
+    // landing page
     const landing = new Container(stageW, stageH).addTo();
     asset("Pistolero.mp3").play({loop:true, volume:.5});
     const bgLanding = asset ("petals.jpg").clone().scaleTo(stage,null,100).centerReg(landing);
@@ -579,7 +579,7 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
 
       // ending();
 
-      function ending(score=3) {
+      function ending(score=10) {
         Ticker.add(()=>{
           if (missSound) missSound.volume = 0;
         });
@@ -601,7 +601,7 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
                     color: white,
                 })
 
-        const eButton = new Button(null,null,eBLabel,"#00A8B5","#006F72",null,null,null,null,null,5).centerReg().loc(pLabel).mov(0,100);
+        const eButton = new Button(null,null,eBLabel,"#00A8B5","#006F72",null,null,null,null,null,10).centerReg().loc(pLabel).mov(0,100);
         eButton.tap(e=>{zgo("index.html")});
 
 
@@ -613,6 +613,21 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
                       size: 40,
                       color: white
                     }).centerReg().loc(pLabel).mov(0,-70);
+        }
+
+        if (score ==10) {
+
+            const wLabel1 = new Label({
+                      text: "Prize",
+                      font: "Lato-Regular",
+                      size: 24,
+                      color: white,
+                  });
+
+            const buttonW = new Button(null,null,wLabel1,"#00A8B5","#006F72",null,null,null,null,null,10).centerReg().loc(eButton).mov(-110,0);
+            eButton.mov(110,0);
+            buttonW.tap(e=>{zgo("https://corawan.com/YayoiKusamaXZimnastics/")});
+
         }
       }
 
