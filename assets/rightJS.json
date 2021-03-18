@@ -1,0 +1,24 @@
+{
+
+"images": [
+    "rightJS.png"
+],
+
+"framerate": 20,
+"frames": [
+    [1, 1, 899, 574, 0, 538.15, 372],
+    [1, 577, 692, 846, 0, 436.5, 326.5],
+    [1, 1425, 460, 471, 0, 302, 224.99]
+],
+
+"animations": {
+    "rightJump": { "frames": [0, 2] },
+    "rightJump1": { "frames": [2,0] }
+},
+
+"texturepacker": [
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:f17d8e9e79f98f9d6f7b3532ee26cd22:070ea172d4785b64da49201ecb2cef3a:86935e08a02f53a425dbb5908d0f3ef1$",
+        "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
+]
+
+}

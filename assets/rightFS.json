@@ -1,0 +1,23 @@
+{
+
+"images": [
+    "rightFS.png"
+],
+
+"framerate": 20,
+"frames": [
+    [1, 1, 807, 1866, 0, 316.2, 1082.29],
+    [810, 1, 830, 1735, 0, 733.44, 798.5],
+    [1642, 1, 931, 1546, 0, 171.09, 602.5]
+],
+
+"animations": {
+    "rightFlip": { "frames": [0,1] }
+},
+
+"texturepacker": [
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:cd94608fd8cd9304c6b3587e3e96605b:e2f127a03efe7dd937a595959fac41dc:ffb0066d26985270221133db2000e583$",
+        "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
+]
+
+}

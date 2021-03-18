@@ -1,0 +1,635 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Zimnastics</title>
+
+<!-- Welcome to ZIM at https://zimjs.com - Code Creativity!                              -->
+<!-- ZIM runs on the HTML Canvas powered by JavaScript and CreateJS https://createjs.com -->
+<!-- ZIM is free to use. You can donate to help improve ZIM at https://zimjs.com/donate  -->
+
+<script src="https://zimjs.org/cdn/1.3.2/createjs.js"></script>
+<script src="https://zimjs.org/cdn/cat/03/zim.js"></script>
+<!-- use zimjs.com/distill for minified individual functions! -->
+
+<script src="https://zimjs.org/cdn/Box2dWeb-2.1.a.3.min.js"></script>
+<script src="https://zimjs.org/cdn/physics_2.1.js"></script>
+
+
+<script>
+
+// SCALING OPTIONS
+// scaling can have values as follows with full being the default
+// "fit"	sets canvas and stage to dimensions and scales to fit inside window size
+// "outside"	sets canvas and stage to dimensions and scales to fit outside window size
+// "full"	sets stage to window size with no scaling
+// "tagID"	add canvas to HTML tag of ID - set to dimensions if provided - no scaling
+
+const scaling = "fit"; // this will resize to fit inside the screen dimensions
+const width = 1024;
+const height = 768;
+const color = "#140f28"; // ZIM colors like green, blue, pink, faint, clear, etc.
+const outerColor = "#0d1227"; // any HTML colors like "violet", "#333", etc. are fine to use
+const path = "assets/";
+const background = ["logo.png", "stadium.jpg", "petals.jpg", "lights.jpg"];
+const apparatus = ["ball.png", "club.png", "hoop.png","ribbon.png", "robe.png"];//"ribbon.png", "robe.png","club2.png"
+const catchA = ["ballC.png", "clubC.png","hoopC.png","ribbonC.png", "robeC.png"];//, "ribbonC.png", "robeC.png"
+const catchAL = ["ballCL.png", "clubCL.png","hoopCL.png","ribbonCL.png", "robeCL.png"];
+const rightF = ["right.png", "rightFlip.png", "rightFlip1.png", "rightFloor.png"];
+const rightJ = ["rightJump.png", "rightJump1.png", "rightJump2.png"];
+const leftF = ["left.png", "leftFlip.png", "leftFlip1.png", "leftFloor.png"];
+const leftJ = ["leftJump.png", "leftJump1.png", "leftJump2.png"];
+const sprites = ["rightJS.png","rightJS.json","rightFS.png","rightFS.json","leftJS.png","leftJS.json","leftFS.png","leftFS.json", "revolveS.json", "revolveS.png"];
+const fonts = [{font:"score", src:"score.ttf"}, {font:"Lato-Regular", src:"Lato-Regular.ttf"}];
+const sounds = ["Pistolero.mp3", "hit.mp3", "magic.mp3", "miss.mp3"];
+const assets=background.concat(apparatus).concat(catchA).concat(catchAL).concat(rightF).concat(rightJ).concat(leftF).concat(leftJ).concat(sprites).concat(fonts).concat(sounds);
+const waiter = new Waiter(null, null, null, "#FF7697",20).sca(.75);
+
+
+const frame = new Frame(scaling, width, height, color, outerColor, assets, path, waiter);
+frame.on("ready", () => { // ES6 Arrow Function - like function(){}
+    // zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
+
+    const stage = frame.stage;
+    let stageW = frame.width;
+    let stageH = frame.height;
+
+    // see https://zimjs.com/learn.html for video and code tutorials
+    // see https://zimjs.com/docs.html for documentation
+    // see https://zimjs.com/bits.html for 64 Interactive Media techniques
+
+    // *** NOTE: ZIM Cat defaults to time in seconds
+    // All previous versions, examples, videos, etc. have time in milliseconds
+    // This can be set back with TIME = "milliseconds" but we suggest you give it a try!
+    // There will be a warning in the conslole if your animation is not moving ;-)
+
+    // put your code here (you can delete this sample code)
+
+
+    //landing page
+    const landing = new Container(stageW, stageH).addTo();
+    asset("Pistolero.mp3").play({loop:true, volume:.5});
+    const bgLanding = asset ("petals.jpg").clone().scaleTo(stage,null,100).centerReg(landing);
+    let n = rand(0,5);
+    // const container = new Container().centerReg().mov(0,500);
+    let sprite;
+    if (n==0) {
+          sprite = new Sprite({json:asset("revolveS.json")})
+              .scaleTo(stage, 30)
+              .centerReg(landing)
+              .mov(245,0)
+              .run({
+                  loop:true,
+                  label:"revolveRight" //label:"revolveLeft"
+              });
+    }else if (n==1) {
+          zog(n);
+          sprite = new Sprite({json:asset("rightFS.json")})
+              .scaleTo(stage, 18)
+              .centerReg(landing)
+              .mov(265,-50)
+              .run({
+                  loop:true,
+                  label:"rightFlip"
+              });
+    } else if (n==2) {
+          zog(n);
+          sprite = new Sprite({json:asset("rightJS.json")})
+              .scaleTo(stage, 45)
+              .centerReg(landing)
+              .mov(205,-60)
+              .run({
+                  loop:true,
+                  label:"rightJump"
+              });
+    } else if (n==3){
+          zog(n);
+          sprite = new Sprite({json:asset("leftFS.json")})
+              .scaleTo(stage, 18)
+              .centerReg(landing)
+              .mov(125,-50)
+              .run({
+                  loop:true,
+                  label:"leftFlip"
+          });
+    } else if (n==4){
+          zog(n);
+          sprite = new Sprite({json:asset("leftJS.json")})
+              .scaleTo(stage, 45)
+              .centerReg(landing)
+              .mov(225,-60)
+              .run({
+                  loop:true,
+                  label:"leftJump"
+              });
+  } else {
+          zog(n);
+          sprite = new Sprite({json:asset("revolveS.json")})
+              .scaleTo(stage, 30)
+              .centerReg(landing)
+              .mov(245,0)
+              .run({
+                  loop:true,
+                  label:"revolveLeft"
+              });
+  }
+
+    const logo = asset ("logo.png").clone().scaleTo(stage,null,50).centerReg(landing).mov(-150, -50);
+
+    const bLabel = new Label({
+              text: "Start",
+              font: "Lato-Regular",
+              size: 28,
+              color: white,
+          });
+
+    const button = new Button(null,null,bLabel,"#FF7697","#FF4080",null,null,null,null,null,10).sca(0.75).centerReg(landing).loc(logo).mov(-80,140);
+
+    button.tap(()=>{
+      sprite.removeFrom();
+      gamescreen();
+
+    });
+
+    const bLabel1 = new Label({
+              text: "Tutorial",
+              font: "Lato-Regular",
+              size: 28,
+              color: white,
+          });
+
+    const button1 = new Button(null,null,bLabel1,"#FF7697","#FF4080",null,null,null,null,null,10).sca(0.75).centerReg(landing).loc(button).mov(160,0);
+
+    button1.tap(()=>{
+      landing.dispose();
+      tutorialscreen();
+
+    });
+
+    let throwExplain, catchExplain;
+    // PART 2 of SPOTTED: HELP SCREEN CODE - PART OF INTRO SCREEN
+    function tutorialscreen() {
+        const tScreen = new Container(stageW, stageH).addTo();
+        asset ("petals.jpg").clone().scaleTo(stage,100).centerReg(tScreen);
+        const panel = new Panel(stageW/2, stageH/2,series(new Label("Catch a ribbon or robe simply!", 20, "Lato-Regular", white), new Label("Throw a ball, club or hoop straight up!", 20, "Lato-Regular", white)),null, "#140f28",50 )
+        .center(tScreen);
+        let t1, t2, tButton;
+        function catchE() {
+              catchExplain = new Container(panel.width, panel.height).centerReg(panel);
+              var catching =new Sprite({json:asset("revolveS.json")})
+                  .scaleTo(panel, 25)
+                  .centerReg(catchExplain)
+                  .mov(-100,70)
+                  .run({
+                      loop:true,
+                      label:"revolveLeft"
+                  })
+                  .animate({props:{x:300}, time:.7, return:true, loop:true, from:true});
+
+              var ribbon = asset(apparatus[3]).clone().scaleTo(panel, 25).addTo(catchExplain).mov(panel.width/4,0)
+              .animate({props:{y:panel.height}, time:3, return:true, loop:true});
+
+              Ticker.add(()=>{
+              if (ribbon.hitTestCircles(catching)) {
+                 asset("magic.mp3").play({volume:.5});
+                 catching.dispose();
+                 ribbon.dispose();
+                 const catchF = asset(catchA[3]).clone().scaleTo(panel, 33).center(catchExplain).mov(-panel.width/3.5,0);
+                 catchF.tap(()=>{
+                   catchExplain.dispose();
+                   catchE();
+                 });
+                 t1 = new Label({
+                     text:"Simply catch one and click",
+                     font:"Lato-Regular",
+                     color:"#191970",
+                     size:20,
+                     bold:true,
+                 }).centerReg(catchExplain).mov(75,-15);
+                 t2 = new Label({
+                     text:" on the Zimnast to start another!",
+                     font:"Lato-Regular",
+                     color:"#191970",
+                     size:20,
+                     bold:true,
+                 }).centerReg(catchExplain).mov(75, 15);
+                 stage.update();}
+            });
+          }
+        // content for panel 2
+
+        function throwE(){
+              throwExplain = new Container(panel.width, panel.height).centerReg(panel);;
+              var throwing =new Sprite({json:asset("rightJS.json")})
+                  .scaleTo(panel, 25)
+                  .centerReg(throwExplain)
+                  .mov(-100,120)
+                  .run({
+                      loop:true,
+                      label:"rightJS"
+                  })
+                  .animate({props:{y:0}, time:5});
+              var ball = asset(apparatus[0]).clone().scaleTo(panel, 4).addTo(throwExplain).mov(panel.width/4,0)
+              .animate({props:{y:panel.height}, time:5});
+              Ticker.add(()=>{
+              if (ball.hitTestCircles(throwing)) {
+                 asset("hit.mp3").play({volume:.5});
+                 throwing.removeFrom();
+                 ball.animate({props:{y:-1000}, time:.5});
+                 var rightThrow = new Sprite({json:asset("revolveS.json")})
+                     .scaleTo(panel, 25)
+                     .centerReg(throwExplain)
+                     .mov(-110,70)
+                     .run({
+                         loop:true,
+                         label:"revolveLeft"
+                     })
+                     .animate({props:{y:180},
+                       time:3,
+                       loop:true,
+                       return:true,
+                       loopCount:1,
+                       call: wrongThrow});
+                 t1 = new Label({
+                     text:"Throw an apparatus",
+                     font:"Lato-Regular",
+                     color:"#191970",
+                     size:20,
+                     bold:true,
+                 }).centerReg(throwExplain).mov(65,-15);
+                 t2 = new Label({
+                     text:"straight up!",
+                     font:"Lato-Regular",
+                     color:"#191970",
+                     size:20,
+                     bold:true,
+                 }).centerReg(throwExplain).mov(65, 15);
+                 stage.update();
+
+                 function wrongThrow(){
+                   rightThrow.removeFrom();
+                   var wSprite = new Sprite({json:asset("rightJS.json")})
+                       .scaleTo(panel, 25)
+                       .centerReg(throwExplain)
+                       .mov(-180,70)
+                       .run({
+                           label:"rightJump1",
+                           return:true
+                       })
+                       .animate({props:{x:200, y:100}, time:.5, wait:.5});
+                   var wBall = asset(apparatus[0]).clone().scaleTo(panel, 4).center(throwExplain).mov(0,-1000)
+                   .animate({props:{y:panel.height}, time:1.5});
+                   Ticker.add(()=>{
+                   if (wSprite.hitTestCircles(wBall)) {
+                      asset("hit.mp3").play({volume:.5});
+                      wBall.animate({props:{x:2000, y:-1000}, time:.5,call:gameButton});
+                      wSprite.dispose();
+                      new Sprite({json:asset("revolveS.json")})
+                          .scaleTo(panel, 25)
+                          .centerReg(throwExplain)
+                          .mov(-110,70)
+                          .run({
+                              loop:true,
+                              label:"revolveLeft"
+                          })
+                          .animate({props:{y:180},
+                            time:3,
+                            loop:true,
+                            return:true});
+                      t1.text = "Don't throw an apparatus";
+                      t1.color="#FF4080";
+                      t1.mov(-20,0);
+                      t2.text = "to one side!";
+                      // t2.loc(t1);
+                      t2.color="#FF4080";
+
+                    }
+                 });
+                 }
+              }
+              });
+      }
+        // event to change content as panels change
+        catchE();
+        panel.on("change", function () {
+           if (catchExplain.parent) {
+              catchExplain.dispose();
+              if (tButton) tButton.dispose();
+              throwE();
+           } else {
+              throwExplain.dispose();
+              if (tButton) tButton.dispose();
+              catchE();
+           }
+        });
+
+        function gameButton(){
+          zog("running");
+          t1.mov(0,-18);
+          t2.mov(0,-18);
+          tButton = new Button(null,null,new Label ("Ready", 30, "Lato-Regular", white),"#00214c","#140f28",null,null,null,null,null,10).sca(0.75)
+          .centerReg(panel).loc(t2).mov(0,60);
+          tButton.tap(e=>{
+              tScreen.dispose();
+              gamescreen();
+          });
+        }
+    }
+
+
+    function gamescreen() {
+      // createjs.Sound.stop();
+      const bg = asset ("stadium.jpg").clone().scaleTo(stage,100).centerReg();
+
+      const physics = new Physics({borders:new Boundary(0,-stageH,stageW,stageH*2), gravity:10}).drag();
+      physics.remove(physics.borderTop);
+      // physics.debug();
+
+      //
+      //Sprites
+      let rightJS= new Sprite({json:asset("rightJS.json")})
+          .scaleTo(stage, 20)
+          .centerReg()
+          .alp(0)
+          // .mov(-100,0)
+          .run({
+              loop:true,
+              label:"rightJump"
+          })
+          .addPhysics(false);
+
+      let leftJS= new Sprite({json:asset("leftJS.json")})
+            .scaleTo(stage, 20)
+            .centerReg()
+            .alp(0)
+            // .mov(-100,0)
+            .run({
+                loop:true,
+                label:"leftJump"
+            })
+            .addPhysics(false);
+
+      let revolveS = new Sprite({json:asset("revolveS.json")})
+          .scaleTo(stage, 15)
+          .alp(0)
+          .centerReg()
+          // .mov(-100,0)
+          .run({
+              loop:true,
+              label:"revolveRight" //label:"revolveLeft"
+          })
+          .addPhysics(false);;
+
+      const target = new MotionController({
+         target:new Circle(1,clear),
+         type:"mousemove",
+      });
+
+      let x=0;
+      target.x=-stageW,
+      Ticker.add(()=>{
+          rightJS.body.x = target.x;
+          rightJS.body.y = target.y
+          revolveS.body.x = target.x;
+          revolveS.body.y = target.y;
+          leftJS.body.x = target.x;
+          leftJS.body.y = target.y;
+
+          if (target.x > x) {
+            leftJS.alp(0);
+            revolveS.alp(0);
+            rightJS.alp(1);
+            direction="right"
+            x=target.x;
+          }else if (target.x==x) {
+            leftJS.alp(0);
+            rightJS.alp(0);
+            revolveS.alp(1);
+            x=target.x;
+          }else if (target.x<x) {
+            rightJS.alp(0);
+            revolveS.alp(0);
+            leftJS.alp(1);
+            x=target.x;
+            direction="left"
+          }
+
+      })
+
+
+      //Scoreboard;
+      let points=0;
+      const score = new Pane({
+             width: 60,
+             height:75,
+             displayClose:false,
+             backdropClose: false,
+             backgroundColor: white,
+             corner: [0, 20, 0, 20]
+         }).show().loc(50, 40);
+
+      const scoreText = new Label({
+                text: "Score",
+                font: "Lato-Regular",
+                size: 10,
+                color: blue,
+            }).centerReg(score).mov(0,25);
+
+      const pointsText = new Label({
+               text: points,
+               font: "Lato-Regular",
+               size: 50,
+               color: dark,
+           }).centerReg(score).mov(0,-5);
+
+      //game function
+
+      //props falling
+      let bounciness=1;
+      let density=10;
+      let level=1;
+      let sensitivity=1;
+      let miss=0;
+      let missSound;
+
+      timeout(3, ()=> game(bounciness,density,sensitivity,level));
+
+      function game(bounciness,density,sensitivity,level) {
+          let m=0;
+          level+=1;
+          throws=level;
+          let shape = "";
+          const n = Math.floor(rand(0,4));
+          if (n==0) {
+            shape="circle"
+          } else {
+            shape="rectangle"
+          }
+
+          if (n==0){
+            scale=3
+          } else if (n==1){
+            scale=5
+          } else if (n==2){
+            scale=7.5
+          } else{
+            scale=10
+          }
+          const app = asset(apparatus[n])
+            .clone()
+            .loc(rand(100, stageW-100),-100)
+            .scaleTo(stage,scale)
+            .addPhysics({
+            dynamic: true, //set it to false if not moving this
+            shape: shape, //handy for PNG image
+            //linear:0.1, //0.5 as default linear damping
+            //angular:0, //angular damping
+            density: density,//get lighter
+            bounciness: bounciness,//0 as default
+            // categoryBits:2,//a collision category
+          })
+            .contact(obj=>{
+              if (pointsText.text>9 || miss>5) {
+                // createjs.Sound.stop();
+                app.dispose();
+                ending(pointsText.text);
+              }
+              if (obj==rightJS || obj==leftJS || obj==revolveS) {
+                if (n<3){
+                  if (missSound) missSound.volume = 0;
+                  asset("hit.mp3").play({volume:.5});
+                  app.impulse((target.x-app.x)*sensitivity*density,-30*density,target.x, target.y);
+                  throws-=1; //throw ball, clubs, hoop for required times before claiming winning position
+                } else{
+                  throws=0 //we do not throw robe and ribbon!
+                }
+              }
+              //reduce score when hitting bottom
+              if (obj.type == "Border" && obj.side == "bottom") {
+                // createjs.Sound.stop();
+                missSound = asset("miss.mp3").play({volume:.5});
+                points-=1;
+                miss+=1;
+                pointsText.text=points;
+                if (pointsText.text<0) {
+                  pointsText.size=40;
+                  pointsText.centerReg(score).mov(0,-5);
+                }else{
+                  pointsText.size=60;
+                  pointsText.centerReg(score).mov(0,-5);
+                }
+                if (n<3){
+                  throws+=1; //if ball, clubs, hoop hit the ground, the number of throws needed will be up
+                }
+              }
+              //show winningPost and bring to the next level
+              if ((obj==rightJS || obj==leftJS || obj==revolveS) && throws==0) {//(o.type == "Border" && o.side == "bottom")
+                if (missSound) missSound.volume = 0;
+                asset("magic.mp3").play({volume:.5});
+                let winningPost;
+                if (direction=="right" && m==0) {
+                  let wpx = target.x;
+                  let wpy = target.y;
+                  if (wpx<50) wpx=50;
+                  if (wpx>stageW-200) wpx=stageW-200;
+                  if (wpy>stageH-200) wpy=stageH-200;
+                  if (n==0 || n==4) winningPost = asset(catchA[n]).clone().loc(wpx, wpy).scaleTo(stage,25);
+                  else winningPost = asset(catchA[n]).clone().loc(wpx, wpy).scaleTo(stage,20);
+                  m+=1;
+                }else if (direction=="left" && m==0) {
+                  let wpx = target.x;
+                  let wpy = target.y;
+                  if (wpx<50) wpx=50;
+                  if (wpx>stageW-200) wpx=stageW-200;
+                  if (wpy>stageH-200) wpy=stageH-200;
+                  if (n==0 || n==4) winningPost = asset(catchAL[n]).clone().loc(wpx, wpy).scaleTo(stage,27);
+                  else winningPost = asset(catchAL[n]).clone().loc(wpx, wpy).scaleTo(stage,20);
+                  m+=1;}
+                points+=1;
+                pointsText.text=points;
+                if (pointsText.text<0) {
+                  pointsText.size=40;
+                  pointsText.centerReg(score).mov(0,-5);
+                }else{
+                  pointsText.size=60;
+                  pointsText.centerReg(score).mov(0,-5);
+                }
+                app.dispose();
+                leftJS.sca(0);
+                revolveS.sca(0);
+                rightJS.sca(0);
+                if (winningPost) {
+                    winningPost.on("click",()=>{
+                      winningPost.dispose();
+                      bounciness*=1.05;
+                      density*=1.1;
+                      sensitivity*=1.1;
+                      level+=1;
+                      game(bounciness,density,sensitivity,level);
+                      leftJS.sca(.11);
+                      rightJS.sca(.21);
+                      revolveS.sca(.11);
+                    })
+                }
+              }
+            });
+          }
+              frame.on("resize", physics.updateDebug);
+      }
+
+      // ending();
+
+      function ending(score=3) {
+        Ticker.add(()=>{
+          if (missSound) missSound.volume = 0;
+        });
+
+        const bgLanding = asset ("lights.jpg").scaleTo(stage,null,100).centerReg();
+        const logoT = asset ("logo.png").clone().scaleTo(stage,null,25).addTo().mov(10, 10);
+
+        const pLabel = new Label({
+                      text: "Your score is " + score + " out of 10.",
+                      font: "score",
+                      size: 40,
+                      color: white,
+                  }).centerReg().mov(0,-50);
+
+        const eBLabel = new Label({
+                    text: "Try again",
+                    font: "Lato-Regular",
+                    size: 24,
+                    color: white,
+                })
+
+        const eButton = new Button(null,null,eBLabel,"#00A8B5","#006F72",null,null,null,null,null,5).centerReg().loc(pLabel).mov(0,100);
+        eButton.tap(e=>{zgo("index.html")});
+
+
+        if (score > 7) {
+          pLabel.centerReg();
+          eButton.loc(pLabel).mov(0,100);
+          new Label({text: "Well done!",
+                      font: "score",
+                      size: 40,
+                      color: white
+                    }).centerReg().loc(pLabel).mov(0,-70);
+        }
+      }
+
+
+    // frame.on("resize", physics.updateDebug);
+
+    stage.update(); // this is needed to show any changes
+
+}); // end of ready
+
+</script>
+
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+
+</head>
+
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+</body>
+</html>

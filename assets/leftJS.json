@@ -1,0 +1,23 @@
+{
+
+"images": [
+    "leftJS.png"
+],
+
+"framerate": 20,
+"frames": [
+    [1, 1, 1796, 1148, 0, 770.72, 757],
+    [1, 1151, 1380, 1689, 0, 578, 562.5],
+    [1, 2842, 917, 938, 0, 338.5, 366.5]
+],
+
+"animations": {
+    "leftJump": { "frames": [0, 2] }
+},
+
+"texturepacker": [
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:52609552db85b865cd98bfe7130f53e2:5f06b3401de0e0b2196f076d98cfceba:26d74b570b63829e28060ea400e8671e$",
+        "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
+]
+
+}
