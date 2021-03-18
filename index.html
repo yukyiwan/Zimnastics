@@ -446,7 +446,7 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
 
       //props falling
       let bounciness=1;
-      let density=10;
+      let density=1;
       let level=1;
       let sensitivity=1;
       let miss=0;
@@ -498,7 +498,7 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
                 if (n<3){
                   if (missSound) missSound.volume = 0;
                   asset("hit.mp3").play({volume:.5});
-                  app.impulse((target.x-app.x)*sensitivity*density,-30*density,target.x, target.y);
+                  app.impulse((target.x-app.x)*sensitivity,-200,target.x, target.y);
                   throws-=1; //throw ball, clubs, hoop for required times before claiming winning position
                 } else{
                   throws=0 //we do not throw robe and ribbon!
@@ -562,8 +562,8 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
                     winningPost.on("click",()=>{
                       winningPost.dispose();
                       bounciness*=1.05;
-                      density*=1.1;
-                      sensitivity*=1.1;
+                      density*=1.05;
+                      sensitivity*=1.05;
                       level+=1;
                       game(bounciness,density,sensitivity,level);
                       leftJS.sca(.11);
