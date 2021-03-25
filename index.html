@@ -53,7 +53,7 @@ const sprites = ["rightJS.png","rightJS.json","rightFS.png","rightFS.json","left
 const fonts = [{font:"score", src:"score.ttf"}, {font:"Lato-Regular", src:"Lato-Regular.ttf"}];
 const sounds = ["Pistolero.mp3", "hit.mp3", "magic.mp3", "miss.mp3"];
 const assets=background.concat(apparatus).concat(catchA).concat(catchAL).concat(rightF).concat(rightJ).concat(leftF).concat(leftJ).concat(sprites).concat(fonts).concat(sounds);
-const waiter = new Waiter(null, null, null, "#FF7697",20).sca(.75);
+const waiter = new Waiter(null, null, null, "#FF7697",20).sca(.5);
 
 
 const frame = new Frame(scaling, width, height, color, outerColor, assets, path, waiter);
@@ -487,13 +487,14 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
           }
           const app = asset(apparatus[n])
             .clone()
+            .centerReg()
             .loc(rand(100, stageW-100),-100)
             .scaleTo(stage,scale)
             .addPhysics({
             dynamic: true, //set it to false if not moving this
             shape: shape, //handy for PNG image
             //linear:0.1, //0.5 as default linear damping
-            //angular:0, //angular damping
+            // angular:1, //angular damping
             density: density,//get lighter
             bounciness: bounciness,//0 as default
             // categoryBits:2,//a collision category
